@@ -1,11 +1,19 @@
 import { Fragment } from "react";
+import { useState, useEffect } from "react";
+
 import { UserItem } from "./user-item/UserItem";
 import { UserCreate } from "./user-create/UserCreate";
 import * as userService from "../../services/UserService";
-import { useState } from "react";
+
 
 export const UsersList = () => {
+    const [users, setUsers] = useState([]);
     const [userAction, setUserAction] = useState({ user: null }, { action: null });
+
+    useEffect(() => {
+        userService.getUsersList()
+                   .then(users => setUsers(users));
+    }, []);
 
     const userActionHandler = (userId, actionType) => {
         userService.getUser(userId)
@@ -54,7 +62,11 @@ export const UsersList = () => {
             <div className="table-wrapper">
 
                 {userAction.userAction === "createUser" &&
-                    <UserCreate createUser={createUserHandler} />}
+                    <UserCreate
+                        createUser={createUserHandler}
+                        closeTab={closeHandler}
+                    />
+                }
 
                 <table className="table">
                     <thead>
@@ -113,7 +125,11 @@ export const UsersList = () => {
                     </thead>
                     <tbody>
 
-                        <UserItem />
+                        { users.map(user =>
+                            <tr key={user._id}>
+                                <UserItem {...user} />
+                            </tr>) }
+
 
                     </tbody>
                 </table>

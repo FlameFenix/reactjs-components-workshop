@@ -1,6 +1,7 @@
 const baseUrl = `http://localhost:3005/api/users`;
 
 export const createUser = async (userData) => {
+
     console.log(userData);
 
     const response = await fetch(baseUrl, {
@@ -27,4 +28,14 @@ export const getUser = async (userId) => {
     console.log(result);
 
     return result.user;
+}
+
+export const getUsersList = async () => {
+    const response = await fetch(baseUrl);
+
+    const result = await response.json();
+
+    console.log(result.users);
+
+    return result.users;
 }
