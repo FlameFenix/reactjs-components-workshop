@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import { useState, useEffect } from "react";
 
 import { UserItem } from "./user-item/UserItem";
+import { UserDetails } from "./user-details/UserDetails";
 import { UserCreate } from "./user-create/UserCreate";
 import * as userService from "../../services/UserService";
 
@@ -12,7 +13,7 @@ export const UsersList = () => {
 
     useEffect(() => {
         userService.getUsersList()
-                   .then(users => setUsers(users));
+            .then(users => setUsers(users));
     }, []);
 
     const userActionHandler = (userId, actionType) => {
@@ -64,6 +65,13 @@ export const UsersList = () => {
                 {userAction.userAction === "createUser" &&
                     <UserCreate
                         createUser={createUserHandler}
+                        closeTab={closeHandler}
+                    />
+                }
+
+                {userAction.userAction === "info" &&
+                    <UserDetails
+                        {...userAction.user}
                         closeTab={closeHandler}
                     />
                 }
@@ -125,10 +133,10 @@ export const UsersList = () => {
                     </thead>
                     <tbody>
 
-                        { users.map(user =>
+                        {users.map(user =>
                             <tr key={user._id}>
-                                <UserItem {...user} />
-                            </tr>) }
+                                <UserItem {...user} actionHandler={userActionHandler} />
+                            </tr>)}
 
 
                     </tbody>

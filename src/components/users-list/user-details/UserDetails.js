@@ -1,12 +1,12 @@
-export const UserDetails = () => {
+export const UserDetails = (props) => {
     return (
         <div className="overlay">
-            <div className="backdrop"></div>
+            <div className="backdrop" onClick={props.closeTab}></div>
             <div className="modal">
                 <div className="detail-container">
                     <header className="headers">
                         <h2>User Detail</h2>
-                        <button className="btn close">
+                        <button className="btn close" onClick={props.closeTab}>
                             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="xmark"
                                 className="svg-inline--fa fa-xmark" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
                                 <path fill="currentColor"
@@ -21,24 +21,28 @@ export const UserDetails = () => {
                                 className="image" />
                         </div>
                         <div className="user-details">
-                            <p>User Id: <strong>62bb0c0eda039e2fdccba57b</strong></p>
+                            <p>User Id: <strong>{props._id}</strong></p>
                             <p>
                                 Full Name:
-                                <strong> Peter Johnson </strong>
+                                <strong> {props.firstName} {props.lastName} </strong>
                             </p>
-                            <p>Email: <strong>peter@abv.bg</strong></p>
-                            <p>Phone Number: <strong>0812345678</strong></p>
+                            <p>Email: <strong>{props.email}</strong></p>
+                            <p>Phone Number: <strong>{props.phoneNumber}</strong></p>
                             <p>
                                 Address:
-                                <strong> Bulgaria, Sofia, Aleksandar Malinov 78 </strong>
+                                <strong> {address(props.address)} </strong>
                             </p>
 
-                            <p>Created on: <strong>Wednesday, June 28, 2022</strong></p>
-                            <p>Modified on: <strong>Thursday, June 29, 2022</strong></p>
+                            <p>Created on: <strong>{props.createdAt}</strong></p>
+                            <p>Modified on: <strong>{props.updatedAt}</strong></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     );
+}
+
+function address(props) {
+    return `${props.country}, ${props.city}, ${props.street} ${props.streetNumber}`;
 }
