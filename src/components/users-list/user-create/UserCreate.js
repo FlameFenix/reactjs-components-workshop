@@ -1,4 +1,4 @@
-export const UserEdit = () => {
+export const UserCreate = (props) => {
     return (
         <div className="overlay">
             <div className="backdrop"></div>
@@ -15,7 +15,7 @@ export const UserEdit = () => {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={props.createUser}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>

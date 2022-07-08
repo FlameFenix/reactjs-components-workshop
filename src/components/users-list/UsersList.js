@@ -1,12 +1,61 @@
 import { Fragment } from "react";
 import { UserItem } from "./user-item/UserItem";
+import { UserCreate } from "./user-create/UserCreate";
+import * as userService from "../../services/UserService";
+import { useState } from "react";
 
 export const UsersList = () => {
+    const [userAction, setUserAction] = useState({ user: null }, { action: null });
+
+    const userActionHandler = (userId, actionType) => {
+        userService.getUser(userId)
+            .then(user => setUserAction({
+                user,
+                userAction: actionType
+            }));
+
+    }
+
+    const createUserHandler = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const {
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            imageUrl,
+            ...address
+        } = Object.fromEntries(formData)
+
+        const userData = {
+            firstName,
+            lastName,
+            email,
+            phoneNumber,
+            imageUrl,
+            address: { ...address }
+        }
+
+        userService.createUser(userData);
+
+        closeHandler();
+    }
+
+    const closeHandler = () => {
+        setUserAction({ user: null }, { action: null });
+    };
+
     return (
         <Fragment>
 
-
             <div className="table-wrapper">
+
+                {userAction.userAction === "createUser" &&
+                    <UserCreate createUser={createUserHandler} />}
+
                 <table className="table">
                     <thead>
                         <tr>
@@ -71,7 +120,8 @@ export const UsersList = () => {
 
             </div>
 
-            <button className="btn-add btn">Add new user</button>
+            <button className="btn-add btn" onClick={() => userActionHandler(null, "createUser")}>Add new user</button>
+
         </Fragment>
     );
 }
