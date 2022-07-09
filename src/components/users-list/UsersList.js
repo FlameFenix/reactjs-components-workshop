@@ -4,7 +4,11 @@ import { useState, useEffect } from "react";
 import { UserItem } from "./user-item/UserItem";
 import { UserDetails } from "./user-details/UserDetails";
 import { UserCreate } from "./user-create/UserCreate";
+import { UserDelete } from "./user-delete/UserDelete";
+import { UserEdit } from "./user-edit/UserEdit";
+
 import * as userService from "../../services/UserService";
+
 
 
 export const UsersList = () => {
@@ -34,8 +38,8 @@ export const UsersList = () => {
             firstName,
             lastName,
             email,
-            phoneNumber,
             imageUrl,
+            phoneNumber,
             ...address
         } = Object.fromEntries(formData)
 
@@ -43,19 +47,31 @@ export const UsersList = () => {
             firstName,
             lastName,
             email,
-            phoneNumber,
             imageUrl,
+            phoneNumber,
             address: { ...address }
         }
 
-        userService.createUser(userData);
+        userService.createUser(userData)
+            .then(user => {
+                console.log(user);
+                setUsers(oldUsers => [...oldUsers, user])
+                closeHandler();
+            });
 
-        closeHandler();
     }
 
     const closeHandler = () => {
         setUserAction({ user: null }, { action: null });
     };
+
+    const deleteHandler = (userId) => {
+        userService.deleteUser(userId)
+            .then(result =>
+                setUsers(users => [...users.filter(x => x._id !== result.userId)])
+            );
+        closeHandler();
+    }
 
     return (
         <Fragment>
@@ -69,9 +85,24 @@ export const UsersList = () => {
                     />
                 }
 
+                {userAction.userAction === "edit" &&
+                    <UserEdit
+                        {...userAction.user}
+                        closeTab={closeHandler}
+                    />
+                }
+
                 {userAction.userAction === "info" &&
                     <UserDetails
                         {...userAction.user}
+                        closeTab={closeHandler}
+                    />
+                }
+
+                {userAction.userAction === "delete" &&
+                    <UserDelete
+                        {...userAction.user}
+                        deleteHandler={deleteHandler}
                         closeTab={closeHandler}
                     />
                 }
@@ -135,7 +166,10 @@ export const UsersList = () => {
 
                         {users.map(user =>
                             <tr key={user._id}>
-                                <UserItem {...user} actionHandler={userActionHandler} />
+                                < UserItem
+                                    {...user}
+                                    actionHandler={userActionHandler}
+                                />
                             </tr>)}
 
 

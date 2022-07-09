@@ -2,8 +2,6 @@ const baseUrl = `http://localhost:3005/api/users`;
 
 export const createUser = async (userData) => {
 
-    console.log(userData);
-
     const response = await fetch(baseUrl, {
         method: 'POST',
         headers: {
@@ -17,7 +15,20 @@ export const createUser = async (userData) => {
 
     console.log(result);
 
-    return result.user;
+    return result;
+}
+
+export const deleteUser = async (userId) => {
+
+    const response = await fetch(baseUrl + `/${userId}`, {
+        method: 'DELETE',
+    })
+
+    const result = await response.json();
+
+    console.log(result);
+
+    return result;
 }
 
 export const getUser = async (userId) => {
