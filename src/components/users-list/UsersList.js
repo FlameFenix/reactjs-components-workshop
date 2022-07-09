@@ -73,6 +73,35 @@ export const UsersList = () => {
         closeHandler();
     }
 
+    const userEditHandler = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const {
+            userId,
+            firstName,
+            lastName,
+            email,
+            imageUrl,
+            phoneNumber,
+            ...address
+        } = Object.fromEntries(formData)
+
+        const userData = {
+            userId,
+            firstName,
+            lastName,
+            email,
+            imageUrl,
+            phoneNumber,
+            address: { ...address }
+        }
+
+        userService.editUser(userId, userData)
+        closeHandler();
+    }
+
     return (
         <Fragment>
 
@@ -88,6 +117,7 @@ export const UsersList = () => {
                 {userAction.userAction === "edit" &&
                     <UserEdit
                         {...userAction.user}
+                        editHandler={userEditHandler}
                         closeTab={closeHandler}
                     />
                 }

@@ -18,6 +18,25 @@ export const createUser = async (userData) => {
     return result;
 }
 
+export const editUser = async (userId, userData) => {
+
+    console.log(userId);
+    const response = await fetch(baseUrl + `/${userId}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': 'application/json'
+        },
+        body: JSON.stringify(userData),
+
+    })
+
+    const result = await response.json();
+
+    console.log(result);
+
+    return result;
+}
+
 export const deleteUser = async (userId) => {
 
     const response = await fetch(baseUrl + `/${userId}`, {

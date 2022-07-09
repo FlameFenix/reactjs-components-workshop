@@ -1,7 +1,7 @@
 export const UserEdit = (props) => {
     return (
         <div className="overlay">
-            <div className="backdrop" onClick={props.closeTab}></div>
+            <div className="backdrop" onClick={props.closeTabn}></div>
             <div className="modal">
                 <div className="user-container">
                     <header className="headers">
@@ -15,7 +15,15 @@ export const UserEdit = (props) => {
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={props.editHandler}>
+                    <div className="form-group long-line">
+                            <label htmlFor="userId">User ID</label>
+                            <div className="input-wrapper">
+                                <span><i className="fa-solid fa-key"></i></span>
+                                <input id="userId" name="userId" type="text" defaultValue={props._id} readOnly={true}/>
+                            </div>
+                        </div>
+
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
@@ -113,7 +121,7 @@ export const UserEdit = (props) => {
                             </div>
                         </div>
                         <div id="form-actions">
-                            <button id="action-save" className="btn" type="submit">Save</button>
+                            <button id="action-save" className="btn" type="submit" >Save</button>
                             <button id="action-cancel" className="btn" type="button" onClick={props.closeTab}>
                                 Cancel
                             </button>
