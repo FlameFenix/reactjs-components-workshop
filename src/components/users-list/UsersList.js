@@ -8,16 +8,26 @@ import { UserDelete } from "./user-delete/UserDelete";
 import { UserEdit } from "./user-edit/UserEdit";
 
 import * as userService from "../../services/UserService";
+import { Overlap } from "./overlap/Overlap";
 
 
 
 export const UsersList = () => {
     const [users, setUsers] = useState([]);
+
     const [userAction, setUserAction] = useState({ user: null }, { action: null });
+
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         userService.getUsersList()
-            .then(users => setUsers(users));
+            .then(users => {
+                setUsers(users)
+                setTimeout(() => {
+                setLoading(false)
+                }, 1000);
+            });
     }, []);
 
     const userActionHandler = (userId, actionType) => {
@@ -26,8 +36,9 @@ export const UsersList = () => {
                 user,
                 userAction: actionType
             }));
-
     }
+
+
 
     const createUserHandler = (e) => {
         e.preventDefault();
@@ -106,6 +117,8 @@ export const UsersList = () => {
         <Fragment>
 
             <div className="table-wrapper">
+
+
 
                 {userAction.userAction === "createUser" &&
                     <UserCreate
@@ -194,15 +207,17 @@ export const UsersList = () => {
                     </thead>
                     <tbody>
 
-                        {users.map(user =>
-                            <tr key={user._id}>
-                                < UserItem
-                                    {...user}
-                                    actionHandler={userActionHandler}
-                                />
-                            </tr>)}
+                        {loading && <Overlap />}
 
-
+                        {!loading &&
+                            users.map(user =>
+                                <tr key={user._id}>
+                                    < UserItem
+                                        {...user}
+                                        actionHandler={userActionHandler}
+                                    />
+                                </tr>)
+                        }
                     </tbody>
                 </table>
 
