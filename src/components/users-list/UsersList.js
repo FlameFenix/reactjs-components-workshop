@@ -6,26 +6,29 @@ import { UserDetails } from "./user-details/UserDetails";
 import { UserCreate } from "./user-create/UserCreate";
 import { UserDelete } from "./user-delete/UserDelete";
 import { UserEdit } from "./user-edit/UserEdit";
+import { Overlap } from "./overlap/Overlap";
+import { Search } from "../common/Search";
+import { Pagination } from "../pagination/Pagination";
 
 import * as userService from "../../services/UserService";
-import { Overlap } from "./overlap/Overlap";
 
 
 
-export const UsersList = () => {
+
+export const UsersList = (props) => {
+
     const [users, setUsers] = useState([]);
 
     const [userAction, setUserAction] = useState({ user: null }, { action: null });
 
     const [loading, setLoading] = useState(true);
 
-
     useEffect(() => {
         userService.getUsersList()
             .then(users => {
                 setUsers(users)
                 setTimeout(() => {
-                setLoading(false)
+                    setLoading(false);
                 }, 1000);
             });
     }, []);
@@ -37,8 +40,6 @@ export const UsersList = () => {
                 userAction: actionType
             }));
     }
-
-
 
     const createUserHandler = (e) => {
         e.preventDefault();
@@ -113,8 +114,23 @@ export const UsersList = () => {
         closeHandler();
     }
 
+    const searchHandler = (search, criteria) => {
+
+        setLoading(true)
+        userService.getUsersList()
+            .then(users => {
+                setUsers(users.filter(x => x[criteria] === search))
+                setTimeout(() => {
+                    setLoading(false);
+                }, 1000);
+            });
+    }
+
     return (
         <Fragment>
+
+            <Search search={searchHandler} />
+
 
             <div className="table-wrapper">
 
@@ -149,6 +165,8 @@ export const UsersList = () => {
                         closeTab={closeHandler}
                     />
                 }
+
+                {loading && <Overlap />}
 
                 <table className="table">
                     <thead>
@@ -205,10 +223,9 @@ export const UsersList = () => {
                             <th>Actions</th>
                         </tr>
                     </thead>
+
+
                     <tbody>
-
-                        {loading && <Overlap />}
-
                         {!loading &&
                             users.map(user =>
                                 <tr key={user._id}>
@@ -224,6 +241,8 @@ export const UsersList = () => {
             </div>
 
             <button className="btn-add btn" onClick={() => userActionHandler(null, "createUser")}>Add new user</button>
+
+            <Pagination />
 
         </Fragment>
     );

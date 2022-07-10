@@ -1,6 +1,19 @@
-export const Search = () => {
+export const Search = (props) => {
+    function searchHandler(e) {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        const {
+            search,
+            criteria
+        } = Object.fromEntries(formData);
+
+        props.search(search, criteria)
+    }
+
     return (
-        <form className="search-form">
+        <form className="search-form" onSubmit={searchHandler}>
             <h2>
                 <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user"
                     className="svg-inline--fa fa-user SearchBar_icon__cXpTg" role="img" xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +25,8 @@ export const Search = () => {
                 <span>Users</span>
             </h2>
             <div className="search-input-container">
-                <input type="text" placeholder="Please, select the search criteria" name="search" />
-                 {/* Show the clear button only if input field length !== 0  */}
+                <input type="text" placeholder="Please, select the search criteria" name="search" onChange={console.log('change')}/>
+                {/* Show the clear button only if input field length !== 0  */}
                 <button className="btn close-btn">
                     <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -27,10 +40,10 @@ export const Search = () => {
                 <span>Search Criteria:</span>
                 <select name="criteria" className="criteria" defaultValue={""}>
                     <option value="">Not selected</option>
-                    <option value="">First Name</option>
-                    <option value="">Last Name</option>
-                    <option value="">Email</option>
-                    <option value="">Phone</option>
+                    <option value="firstName">First Name</option>
+                    <option value="lastName">Last Name</option>
+                    <option value="email">Email</option>
+                    <option value="phoneNumber">Phone</option>
                 </select>
             </div>
         </form>
