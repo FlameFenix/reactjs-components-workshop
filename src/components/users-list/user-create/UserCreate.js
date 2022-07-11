@@ -1,4 +1,27 @@
+import { useState } from "react";
+
 export const UserCreate = (props) => {
+    const [values, setValues] = useState({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        imageUrl: '',
+        country: '',
+        city: '',
+        street: '',
+        streetNumber: '',
+    });
+
+    const changeHandler = (e) => {
+
+        setValues(state => ({
+            ...state,
+            [e.target.name]: e.target.value
+
+        }));
+    }
+
     return (
         <div className="overlay">
             <div className="backdrop" onClick={props.closeTab}></div>
@@ -21,7 +44,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="firstName">First name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="firstName" name="firstName" type="text" />
+                                    <input id="firstName" name="firstName" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     First name should be at least 3 characters long!
@@ -31,7 +54,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="lastName">Last name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="lastName" name="lastName" type="text" />
+                                    <input id="lastName" name="lastName" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Last name should be at least 3 characters long!
@@ -44,7 +67,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="email">Email</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-envelope"></i></span>
-                                    <input id="email" name="email" type="text" />
+                                    <input id="email" name="email" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">Email is not valid!</p>
                             </div>
@@ -52,7 +75,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="phoneNumber">Phone number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-phone"></i></span>
-                                    <input id="phoneNumber" name="phoneNumber" type="text" />
+                                    <input id="phoneNumber" name="phoneNumber" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">Phone number is not valid!</p>
                             </div>
@@ -62,7 +85,7 @@ export const UserCreate = (props) => {
                             <label htmlFor="imageUrl">Image Url</label>
                             <div className="input-wrapper">
                                 <span><i className="fa-solid fa-image"></i></span>
-                                <input id="imageUrl" name="imageUrl" type="text" />
+                                <input id="imageUrl" name="imageUrl" onChange={changeHandler} type="text" />
                             </div>
                             <p className="form-error">ImageUrl is not valid!</p>
                         </div>
@@ -72,7 +95,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="country">Country</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="country" name="country" type="text" />
+                                    <input id="country" name="country" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Country should be at least 2 characters long!
@@ -82,7 +105,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="city">City</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-city"></i></span>
-                                    <input id="city" name="city" type="text" />
+                                    <input id="city" name="city" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     City should be at least 3 characters long!
@@ -95,7 +118,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="street">Street</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="street" name="street" type="text" />
+                                    <input id="street" name="street" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Street should be at least 3 characters long!
@@ -105,7 +128,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="streetNumber">Street number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-house-chimney"></i></span>
-                                    <input id="streetNumber" name="streetNumber" type="text" />
+                                    <input id="streetNumber" name="streetNumber" onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Street number should be a positive number!

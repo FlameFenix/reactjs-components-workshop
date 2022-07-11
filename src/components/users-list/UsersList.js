@@ -41,6 +41,12 @@ export const UsersList = (props) => {
             }));
     }
 
+    const createUserAction = () => {
+        setUserAction({
+            userAction: "createUser"
+        });
+    }
+
     const createUserHandler = (e) => {
         e.preventDefault();
 
@@ -240,7 +246,7 @@ export const UsersList = (props) => {
 
             </div>
 
-            <button className="btn-add btn" onClick={() => userActionHandler(null, "createUser")}>Add new user</button>
+            <button className="btn-add btn" onClick={() => createUserAction()}>Add new user</button>
 
             <Pagination />
 
