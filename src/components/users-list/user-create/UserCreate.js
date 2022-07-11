@@ -22,6 +22,21 @@ export const UserCreate = (props) => {
         }));
     }
 
+    const submitHandler = (e) => {
+        e.preventDefault();
+        const userData = {
+            ...values,
+            address: {
+                country: values.country,
+                city: values.city,
+                street: values.street,
+                streetNumber: values.streetNumber
+            }
+        }
+        
+        props.createUser({ ...userData });
+    }
+
     return (
         <div className="overlay">
             <div className="backdrop" onClick={props.closeTab}></div>
@@ -38,13 +53,13 @@ export const UserCreate = (props) => {
                             </svg>
                         </button>
                     </header>
-                    <form onSubmit={props.createUser}>
+                    <form onSubmit={submitHandler}>
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="firstName">First name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="firstName" name="firstName" onChange={changeHandler} type="text" />
+                                    <input id="firstName" name="firstName" value={values.firstName} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     First name should be at least 3 characters long!
@@ -54,7 +69,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="lastName">Last name</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-user"></i></span>
-                                    <input id="lastName" name="lastName" onChange={changeHandler} type="text" />
+                                    <input id="lastName" name="lastName" value={values.lastName} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Last name should be at least 3 characters long!
@@ -67,7 +82,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="email">Email</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-envelope"></i></span>
-                                    <input id="email" name="email" onChange={changeHandler} type="text" />
+                                    <input id="email" name="email" value={values.email} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">Email is not valid!</p>
                             </div>
@@ -75,7 +90,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="phoneNumber">Phone number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-phone"></i></span>
-                                    <input id="phoneNumber" name="phoneNumber" onChange={changeHandler} type="text" />
+                                    <input id="phoneNumber" name="phoneNumber" value={values.phoneNumber} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">Phone number is not valid!</p>
                             </div>
@@ -85,7 +100,7 @@ export const UserCreate = (props) => {
                             <label htmlFor="imageUrl">Image Url</label>
                             <div className="input-wrapper">
                                 <span><i className="fa-solid fa-image"></i></span>
-                                <input id="imageUrl" name="imageUrl" onChange={changeHandler} type="text" />
+                                <input id="imageUrl" name="imageUrl" value={values.imageUrl} onChange={changeHandler} type="text" />
                             </div>
                             <p className="form-error">ImageUrl is not valid!</p>
                         </div>
@@ -95,7 +110,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="country">Country</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="country" name="country" onChange={changeHandler} type="text" />
+                                    <input id="country" name="country" value={values.country} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Country should be at least 2 characters long!
@@ -105,7 +120,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="city">City</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-city"></i></span>
-                                    <input id="city" name="city" onChange={changeHandler} type="text" />
+                                    <input id="city" name="city" value={values.city} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     City should be at least 3 characters long!
@@ -118,7 +133,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="street">Street</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-map"></i></span>
-                                    <input id="street" name="street" onChange={changeHandler} type="text" />
+                                    <input id="street" name="street" value={values.street} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Street should be at least 3 characters long!
@@ -128,7 +143,7 @@ export const UserCreate = (props) => {
                                 <label htmlFor="streetNumber">Street number</label>
                                 <div className="input-wrapper">
                                     <span><i className="fa-solid fa-house-chimney"></i></span>
-                                    <input id="streetNumber" name="streetNumber" onChange={changeHandler} type="text" />
+                                    <input id="streetNumber" name="streetNumber" value={values.streetNumber} onChange={changeHandler} type="text" />
                                 </div>
                                 <p className="form-error">
                                     Street number should be a positive number!
