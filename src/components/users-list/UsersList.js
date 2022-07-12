@@ -48,27 +48,6 @@ export const UsersList = (props) => {
     }
 
     const createUserHandler = (userData) => {
-        // e.preventDefault();
-
-        // const formData = new FormData(e.target);
-
-        // const {
-        //     firstName,
-        //     lastName,
-        //     email,
-        //     imageUrl,
-        //     phoneNumber,
-        //     ...address
-        // } = Object.fromEntries(formData)
-
-        // const userData = {
-        //     firstName,
-        //     lastName,
-        //     email,
-        //     imageUrl,
-        //     phoneNumber,
-        //     address: { ...address }
-        // }
 
         userService.createUser(userData)
             .then(user => {
