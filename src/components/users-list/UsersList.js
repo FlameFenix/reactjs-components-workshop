@@ -12,9 +12,6 @@ import { Pagination } from "../pagination/Pagination";
 
 import * as userService from "../../services/UserService";
 
-
-
-
 export const UsersList = (props) => {
 
     const [users, setUsers] = useState([]);
@@ -100,15 +97,27 @@ export const UsersList = (props) => {
     }
 
     const searchHandler = (search, criteria) => {
+        
+        if (search !== '' && criteria !== '') {
+            setLoading(true)
+            userService.getUsersList()
+                .then(users => {
+                    setUsers(users.filter(x => x[criteria] === search))
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                });
+        } else {
+            setLoading(true)
+            userService.getUsersList()
+                .then(users => {
+                    setUsers(users)
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                });
+        }
 
-        setLoading(true)
-        userService.getUsersList()
-            .then(users => {
-                setUsers(users.filter(x => x[criteria] === search))
-                setTimeout(() => {
-                    setLoading(false);
-                }, 1000);
-            });
     }
 
     return (

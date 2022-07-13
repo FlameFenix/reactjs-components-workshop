@@ -18,6 +18,7 @@ export const UserCreate = (props) => {
 
     const imageUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
     const phoneNumberRegex = /^\d{10}$/;
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
     const changeHandler = (e) => {
 
@@ -58,7 +59,7 @@ export const UserCreate = (props) => {
     }
 
     function ValidateEmail(e) {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)) {
+        if (emailRegex.test(e.target.value)) {
             setErrors(state => ({
                 ...state,
                 [e.target.name]: false

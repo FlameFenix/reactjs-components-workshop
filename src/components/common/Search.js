@@ -1,15 +1,29 @@
+import { useState } from "react";
+
 export const Search = (props) => {
+
+    const [values, setValues] = useState({
+        criteria: '',
+        search: ''
+    });
+
+    const searchInputHandler = (e) => {
+        setValues(state => ({
+            ...state,
+            [e.target.name]: e.target.value
+        }));
+    }
+
     function searchHandler(e) {
         e.preventDefault();
+        props.search(values.search, values.criteria)
+    }
 
-        const formData = new FormData(e.target);
-
-        const {
-            search,
-            criteria
-        } = Object.fromEntries(formData);
-
-        props.search(search, criteria)
+    function clearHandler() {
+        setValues(state => ({
+            ...state,
+            search: ''
+        }))
     }
 
     return (
@@ -25,11 +39,14 @@ export const Search = (props) => {
                 <span>Users</span>
             </h2>
             <div className="search-input-container">
-                <input type="text" placeholder="Please, select the search criteria" name="search" />
+                <input type="text" placeholder="Please, select the search criteria" name="search" value={values.search} onChange={(e) => searchInputHandler(e)} />
                 {/* Show the clear button only if input field length !== 0  */}
-                <button className="btn close-btn">
-                    <i className="fa-solid fa-xmark"></i>
-                </button>
+
+                {values.search &&
+                    <button className="btn close-btn" onClick={clearHandler}>
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                }
 
                 <button className="btn" title="Please, select the search criteria">
                     <i className="fa-solid fa-magnifying-glass"></i>
@@ -38,7 +55,7 @@ export const Search = (props) => {
 
             <div className="filter">
                 <span>Search Criteria:</span>
-                <select name="criteria" className="criteria" defaultValue={""}>
+                <select name="criteria" className="criteria" defaultValue={""} value={values.criteria} onChange={(e) => searchInputHandler(e)}>
                     <option value="">Not selected</option>
                     <option value="firstName">First Name</option>
                     <option value="lastName">Last Name</option>
