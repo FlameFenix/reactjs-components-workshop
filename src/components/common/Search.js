@@ -55,7 +55,7 @@ export const Search = (props) => {
 
             <div className="filter">
                 <span>Search Criteria:</span>
-                <select name="criteria" className="criteria" defaultValue={""} value={values.criteria} onChange={(e) => searchInputHandler(e)}>
+                <select name="criteria" className="criteria" value={values.criteria} onChange={(e) => searchInputHandler(e)}>
                     <option value="">Not selected</option>
                     <option value="firstName">First Name</option>
                     <option value="lastName">Last Name</option>
