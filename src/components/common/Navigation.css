@@ -1,0 +1,27 @@
+.nav {
+    display: block;
+    background-color: #24292f;
+    padding: 20px;
+    color: #fff;
+    margin-top: 2px;
+}
+
+.list-items {
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    margin: 0 auto;
+    font-size: 20px;
+}
+
+.list-item {
+    border: 1px solid #fff;
+    padding: 3px 15px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.list-item:hover {
+    color: #24292f;
+    background-color: #fff;
+}
