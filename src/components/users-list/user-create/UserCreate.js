@@ -5,6 +5,7 @@ export const UserCreate = (props) => {
     const [errors, setErrors] = useState('');
 
     const [values, setValues] = useState({
+        _id: '',
         firstName: '',
         lastName: '',
         email: '',
@@ -16,9 +17,9 @@ export const UserCreate = (props) => {
         streetNumber: '',
     });
 
-    const imageUrlRegex = /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/;
+    const imageUrlRegex = /^https?:\/\/(?:www.)?[-a-zA-Z0-9@:%._+~#=]{1,256}.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*)$/;
     const phoneNumberRegex = /^\d{10}$/;
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
 
     const changeHandler = (e) => {
 

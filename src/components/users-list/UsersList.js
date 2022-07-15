@@ -11,6 +11,7 @@ import { Search } from "../common/Search";
 import { Pagination } from "../pagination/Pagination";
 
 import * as userService from "../../services/UserService";
+import { OverlapError } from "./overlap/OverlapError";
 
 export const UsersList = (props) => {
 
@@ -20,13 +21,19 @@ export const UsersList = (props) => {
 
     const [loading, setLoading] = useState(true);
 
+    const [fetchSuccess, setFetchSuccess] = useState(false);
+
     useEffect(() => {
         userService.getUsersList()
             .then(users => {
                 setUsers(users)
                 setTimeout(() => {
                     setLoading(false);
+                    setFetchSuccess(true);
                 }, 1000);
+            })
+            .catch(error => {
+                setLoading(false)
             });
     }, []);
 
@@ -50,7 +57,11 @@ export const UsersList = (props) => {
             .then(user => {
                 console.log(user);
                 setUsers(oldUsers => [...oldUsers, user])
+                setFetchSuccess(true);
                 closeHandler();
+            })
+            .catch(error => {
+                setFetchSuccess(false)
             });
 
     }
@@ -63,14 +74,15 @@ export const UsersList = (props) => {
         userService.deleteUser(userId)
             .then(result =>
                 setUsers(users => [...users.filter(x => x._id !== result.userId)])
-            );
+            )
+            .catch(error => {
+                setFetchSuccess(false)
+            });
         closeHandler();
     }
 
-
-
     const searchHandler = (search, criteria) => {
-        
+
         if (search !== '' && criteria !== '') {
             setLoading(true)
             userService.getUsersList()
@@ -78,8 +90,12 @@ export const UsersList = (props) => {
                     setUsers(users.filter(x => x[criteria] === search))
                     setTimeout(() => {
                         setLoading(false);
-                    }, 1000);
-                });
+                    }, 1000)
+                })
+                .catch(error => {
+                    setFetchSuccess(false);
+                    setLoading(false);
+                });;
         } else {
             setLoading(true)
             userService.getUsersList()
@@ -87,21 +103,22 @@ export const UsersList = (props) => {
                     setUsers(users)
                     setTimeout(() => {
                         setLoading(false);
-                    }, 1000);
-                });
+                    }, 1000)
+                })
+                .catch(error => {
+                    setFetchSuccess(false)
+                    setLoading(false);
+                });;
         }
 
     }
 
     return (
         <Fragment>
-
             <Search search={searchHandler} />
 
 
             <div className="table-wrapper">
-
-
 
                 {userAction.userAction === "createUser" &&
                     <UserCreate
@@ -134,75 +151,80 @@ export const UsersList = (props) => {
 
                 {loading && <Overlap />}
 
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Image
-                            </th>
-                            <th>
-                                First name<svg aria-hidden="true" focusable="false" data-prefix="fas"
-                                    data-icon="arrow-down" className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                    <path fill="currentColor"
-                                        d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
-                                    </path>
-                                </svg>
-                            </th>
-                            <th>
-                                Last name<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
-                                    className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 384 512">
-                                    <path fill="currentColor"
-                                        d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
-                                    </path>
-                                </svg>
-                            </th>
-                            <th>
-                                Email<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
-                                    className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 384 512">
-                                    <path fill="currentColor"
-                                        d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
-                                    </path>
-                                </svg>
-                            </th>
-                            <th>
-                                Phone<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
-                                    className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 384 512">
-                                    <path fill="currentColor"
-                                        d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
-                                    </path>
-                                </svg>
-                            </th>
-                            <th>
-                                Created
-                                <svg aria-hidden="true" focusable="false" data-prefix="fas"
-                                    data-icon="arrow-down" className="icon active-icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img"
-                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
-                                    <path fill="currentColor"
-                                        d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
-                                    </path>
-                                </svg>
-                            </th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                {!fetchSuccess && !loading && < OverlapError />}
+
+                {fetchSuccess &&
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Image
+                                </th>
+                                <th>
+                                    First name<svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                        data-icon="arrow-down" className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                        <path fill="currentColor"
+                                            d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>
+                                    Last name<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
+                                        className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 384 512">
+                                        <path fill="currentColor"
+                                            d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>
+                                    Email<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
+                                        className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 384 512">
+                                        <path fill="currentColor"
+                                            d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>
+                                    Phone<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down"
+                                        className="icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 384 512">
+                                        <path fill="currentColor"
+                                            d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>
+                                    Created
+                                    <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                        data-icon="arrow-down" className="icon active-icon svg-inline--fa fa-arrow-down Table_icon__+HHgn" role="img"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                        <path fill="currentColor"
+                                            d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
+                                        </path>
+                                    </svg>
+                                </th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
 
 
-                    <tbody>
-                        {!loading &&
-                            users.map(user =>
-                                <tr key={user._id}>
-                                    < UserItem
-                                        {...user}
-                                        actionHandler={userActionHandler}
-                                    />
-                                </tr>)
-                        }
-                    </tbody>
-                </table>
+                        <tbody>
+                            {!loading &&
+                                users.map(user =>
+                                    <tr key={user._id}>
+                                        < UserItem
+                                            {...user}
+                                            actionHandler={userActionHandler}
+                                        />
+                                    </tr>)
+                            }
+                        </tbody>
+                    </table>
+                }
+
 
             </div>
 
