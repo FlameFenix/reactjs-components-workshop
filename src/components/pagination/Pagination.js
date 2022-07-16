@@ -1,16 +1,38 @@
-export const Pagination = () => {
+import { useEffect, useState } from "react";
+import * as userService from '../../services/UserService'
+export const Pagination = (props) => {
+
+    const [itemsCount, setItemsCount] = useState(5);
+
+    const [pagesCount, setPagesCount] = useState(1);
+
+    const [usersCount, setUsersCount] = useState(0);
+
+    useEffect(() => {
+        userService.getUsersList()
+        .then(users => {
+            setUsersCount(users.count)
+            setPagesCount(Math.ceil(Number(users.count) / Number(itemsCount)))
+        })
+    }, [itemsCount])
+
+    const itemsCountHandler = (e) => {
+        setItemsCount(e.target.value)
+        setPagesCount(Math.ceil(Number(usersCount) / Number(e.target.value)));
+    }
+
     return (
         <div className="pagination position">
             <div className="limits">
                 <span>Items per page:</span>
-                <select name="limit" className="limit" defaultValue={"5"}>
+                <select name="limit" className="limit" value={itemsCount} onChange={(e) => itemsCountHandler(e)}>
                     <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="20">20</option>
                 </select>
             </div>
-            <p className="pages">1 - 1 of 1</p>
+            <p className="pages">1 - {pagesCount} of 1</p>
             <div className="actions">
                 <button className="btn" title="First Page">
                     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="angles-left"

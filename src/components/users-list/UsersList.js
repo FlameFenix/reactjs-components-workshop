@@ -17,6 +17,8 @@ export const UsersList = (props) => {
 
     const [users, setUsers] = useState([]);
 
+    const [usersCount, setUsersCount] = useState(0);
+
     const [userAction, setUserAction] = useState({ user: null }, { action: null });
 
     const [loading, setLoading] = useState(true);
@@ -26,7 +28,8 @@ export const UsersList = (props) => {
     useEffect(() => {
         userService.getUsersList()
             .then(users => {
-                setUsers(users)
+                setUsers(users.users)
+                setUsersCount(Number(users.count));
                 setTimeout(() => {
                     setLoading(false);
                     setFetchSuccess(true);
@@ -87,7 +90,7 @@ export const UsersList = (props) => {
             setLoading(true)
             userService.getUsersList()
                 .then(users => {
-                    setUsers(users.filter(x => x[criteria] === search))
+                    setUsers(users.users.filter(x => x[criteria] === search))
                     setTimeout(() => {
                         setLoading(false);
                     }, 1000)
@@ -100,7 +103,7 @@ export const UsersList = (props) => {
             setLoading(true)
             userService.getUsersList()
                 .then(users => {
-                    setUsers(users)
+                    setUsers(users.users)
                     setTimeout(() => {
                         setLoading(false);
                     }, 1000)
@@ -230,7 +233,7 @@ export const UsersList = (props) => {
 
             <button className="btn-add btn" onClick={() => createUserAction()}>Add new user</button>
 
-            <Pagination />
+            <Pagination usersCount={usersCount}/>
 
         </Fragment>
     );

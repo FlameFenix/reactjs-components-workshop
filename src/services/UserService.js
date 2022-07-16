@@ -67,5 +67,5 @@ export const getUsersList = async () => {
 
     console.log(result.users);
 
-    return result.users;
+    return result;
 }
